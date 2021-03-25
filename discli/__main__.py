@@ -64,7 +64,7 @@ class DiscordCLI:
         # check for update
 
         if Variables.UPDATE:
-            self.console.print(f"New version is released please install via [red]pip install discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
+            self.console.print(f"New version is released please install via [red]pip -u install discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
             sys.exit()
     
         
@@ -183,6 +183,11 @@ def run(path):
 
  
 def discli():
+   
+    if Variables.UPDATE:
+            self.console.print(f"New version is released please install via [red]pip -u install discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
+            sys.exit()
+    
     try:
         if sys.argv[1] == "create":
             try:
