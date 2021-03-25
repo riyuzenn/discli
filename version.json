@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "update": false,
+  "update": true,
   "release_note": "Fixed typos, update README.md"
 }
   
