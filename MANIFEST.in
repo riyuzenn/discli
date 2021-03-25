@@ -1,0 +1,2 @@
+include discli/_ext/welcome.py
+include discli/_ext/moderation.py
