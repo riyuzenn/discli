@@ -193,6 +193,9 @@ if __name__ == "__main__":
         elif sys.argv[1] == "run":
             run(os.getcwd())
 
+        elif sys.argv[1] == "heroku":
+            print("Comming soon! I'll inform you whenever the update comes in.")
+
     except IndexError:
         help_command()
 
