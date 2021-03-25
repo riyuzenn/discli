@@ -30,7 +30,7 @@ def get_long_description():
 setup(
   name="discordcli",
   author="Zenqi",
-  description="An open-source framework for building modern looking desktop applications",
+  description="🎲 Discord Bot CLI for creating / deploying your discord bots!",
   long_description=get_long_description(),
   long_description_content_type='text/markdown',
   url="https://github.com/zenqii/discli",
