@@ -181,8 +181,8 @@ def run(path):
 
     console.print("[green]»[cyan][magenta] main.py[/magenta] is now running")
 
-if __name__ == "__main__":
-
+ 
+def discli():
     try:
         if sys.argv[1] == "create":
             try:
@@ -198,4 +198,8 @@ if __name__ == "__main__":
 
     except IndexError:
         help_command()
+        
+if __name__ == "__main__":
+    discli()
+    
 
