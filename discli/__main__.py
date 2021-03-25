@@ -153,15 +153,12 @@ def help_command():
     console = Console()
     console.print(Variables.BANNER)
     console.print("""\n[red]Welcome to Discli Help Center (Discord Bot CLI) v{} [/]
-
 [magenta]help[/] | [yellow]Show help text[/]
 [magenta]create[/] | [yellow]Create project in current directory[/]
 [magenta]create[/] <dir> | [yellow]Create project in specific directory (optional)[/]
 [magenta]run[/] | [yellow]Run the bot[/]
 [magenta]heroku[/] | [yellow]Create heroku app for free hosting.[/] 
-
 Example:
-
 [green]»[cyan] discli [magenta]create """.format(Variables.VERSION))
 
 def run(path):
@@ -184,7 +181,7 @@ def run(path):
  
 def discli():
     console = Console()
-    if __import__("discli").__version__ == Variables.VERSION:
+    if __import__("discli").__version__ != Variables.VERSION:
             console.print(f"New version is released please install via [red]pip install --upgrade discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
             sys.exit()
     
@@ -206,5 +203,3 @@ def discli():
         
 if __name__ == "__main__":
     discli()
-    
-
