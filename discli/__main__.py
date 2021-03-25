@@ -184,7 +184,7 @@ def run(path):
  
 def discli():
     console = Console()
-    if Variables.UPDATE:
+    if __import__("discli").__version__ == Variables.VERSION:
             console.print(f"New version is released please install via [red]pip install --upgrade discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
             sys.exit()
     
