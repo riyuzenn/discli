@@ -18,7 +18,6 @@
 # SOFTWARE.
 
 
-
 from rich.console import Console
 from rich.progress import track
 import requests
@@ -31,14 +30,14 @@ import sys
 
 class Variables:
     BANNER = """[cyan]
-            █████  ███                   ████   ███ 
-            ░░███  ░░░                   ░░███  ░░░  
-        ███████  ████   █████   ██████  ░███  ████ 
-        ███░░███ ░░███  ███░░   ███░░███ ░███ ░░███ 
-        ░███ ░███  ░███ ░░█████ ░███ ░░░  ░███  ░███ 
-        ░███ ░███  ░███  ░░░░███░███  ███ ░███  ░███ 
-        ░░████████ █████ ██████ ░░██████  █████ █████
-        ░░░░░░░░ ░░░░░ ░░░░░░   ░░░░░░  ░░░░░ ░░░░░ """
+█████  ███                   ████   ███ 
+░░███  ░░░                   ░░███  ░░░  
+███████  ████   █████   ██████  ░███  ████ 
+███░░███ ░░███  ███░░   ███░░███ ░███ ░░███ 
+░███ ░███  ░███ ░░█████ ░███ ░░░  ░███  ░███ 
+░███ ░███  ░███  ░░░░███░███  ███ ░███  ░███ 
+░░████████ █████ ██████ ░░██████  █████ █████
+░░░░░░░░ ░░░░░ ░░░░░░   ░░░░░░  ░░░░░ ░░░░░ """
 
     
     r = requests.get("https://raw.githubusercontent.com/zenqii/discli/main/version.json").json()
@@ -79,14 +78,14 @@ class DiscordCLI:
             bot_token = Prompt.ask("[green]»[yellow] Enter your bot token [red](required)")
 
         prefix = Prompt.ask("[green]»[yellow] Enter bot prefix", default="!")
-        is_herouku = Confirm.ask("\n[green]»[magenta] Would you like to add heroku support?")
+        is_heroku = Confirm.ask("\n[green]»[magenta] Would you like to add heroku support?")
 
         
 
         config["name"] = bot_name
         config["token"] = bot_token
         config["prefix"] = prefix
-        config["heroku"] = is_herouku
+        config["heroku"] = is_heroku
         
         for _ in track(range(50), description="[green]»[cyan] Initializing discli.."):
             time.sleep(.1)
@@ -96,23 +95,23 @@ class DiscordCLI:
             while work:
 
                 self.console.log("[green]»[cyan] Config file created: [blue]{}".format(config))
-                self.create_config(os.getcwd(), config)
+                self.create_config(os.getcwd(), config, is_heroku)
                 self.create_main_file(os.getcwd())
                 self.copy_extension(os.getcwd())
                 work = False
                 time.sleep(1)
                 break
 
-
-
-
-    def create_config(self, path, config):
+    def create_config(self, path, config, is_heroku):   
         with open(path + "\\config.json", 'w') as f:
-            return json.dump(config, f, indent=5)
-        
-        
+            json.dump(config, f, indent=5)
+            f.close()
 
+        if is_heroku:
 
+            with open(path + "\\requirements.txt", "w") as fw:
+                fw.write("discord")
+        
     def copy_extension(self, path):
         abs_path = os.path.dirname(os.path.realpath(__file__))
         try:
@@ -138,9 +137,34 @@ class DiscordCLI:
         self.console.log("[green]»[cyan] main file file created")
 
 
+def help_command():
+
+    os.system("cls")
+    console = Console()
+    console.print(Variables.BANNER)
+    console.print("""\n[red]Welcome to Discli Help Center (Discord Bot CLI) v{} [/]
+
+[magenta]help[/] | [yellow]Show help text[/]
+[magenta]create[/] | [yellow]Create project in current directory[/]
+[magenta]create[/] <dir> | [yellow]Create project in specific directory (optional)[/]
+[magenta]run[/] | [yellow]Run the bot[/]
+[magenta]heroku[/] | [yellow]Create heroku app for free hosting.[/] 
+
+Example:
+
+[green]»[cyan] discli [magenta]create """.format(Variables.VERSION))
+
 if __name__ == "__main__":
-    if sys.argv[1] == "create":
-        if sys.argv[2] != None:
-            DiscordCLI(sys.argv[2])
-        else:
-            DiscordCLI()
+
+    print(sys.argv)
+    #help_command()
+
+    try:
+        if sys.argv[1] == "create":
+            try:
+                DiscordCLI(sys.argv[2])
+            except IndexError:
+                DiscordCLI()
+
+    except IndexError:
+        help_command()
