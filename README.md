@@ -1,7 +1,7 @@
 <h1 align='center'>
   discli
 </h1>
-
+<p align='center'>(still in progress)<p>
 <p align='center'>
   🎲 Discord Bot CLI for creating / deploying your discord bots!
 </p>
