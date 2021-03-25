@@ -28,6 +28,11 @@ import json
 import shutil
 import sys
 
+class Heroku:
+    def __init__(self, path):
+        self.path = path
+
+
 class Variables:
     BANNER = """[cyan]
 █████  ███                   ████   ███ 
@@ -110,8 +115,13 @@ class DiscordCLI:
         if is_heroku:
 
             with open(path + "\\requirements.txt", "w") as fw:
-                fw.write("discord")
-        
+                fw.write("# Requirements file used for heroku. Please enter every needed module here\ndiscord\n#discord['voice'] <- Use this if you want voice support")
+                fw.close()
+
+            with open("Procfile", "w") as f:
+                f.write("web: python main.py")
+
+
     def copy_extension(self, path):
         abs_path = os.path.dirname(os.path.realpath(__file__))
         try:
@@ -154,10 +164,24 @@ Example:
 
 [green]»[cyan] discli [magenta]create """.format(Variables.VERSION))
 
-if __name__ == "__main__":
+def run(path):
+    import subprocess
 
-    print(sys.argv)
-    #help_command()
+    main_file = path + "\\main.py"
+    interpreter = sys.executable
+
+    console = Console()
+    console.print("[green]»[cyan] Running [magenta]main.py[/]")
+    
+    p = subprocess.run(f"{interpreter} {main_file}")
+    
+    if p.returncode != 0:
+        console.print("[red]» [magenta]main.py[/magenta] is missing")
+        sys.exit()
+
+    console.print("[green]»[cyan][magenta] main.py[/magenta] is now running")
+
+if __name__ == "__main__":
 
     try:
         if sys.argv[1] == "create":
@@ -166,5 +190,9 @@ if __name__ == "__main__":
             except IndexError:
                 DiscordCLI()
 
+        elif sys.argv[1] == "run":
+            run(os.getcwd())
+
     except IndexError:
         help_command()
+
