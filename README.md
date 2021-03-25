@@ -36,3 +36,6 @@ Discli offers you a development and deployment system (heroku) (comming soon). I
 discli create
 ```
 <img src='https://github.com/zenqii/discli/raw/main/preview/discli.gif'/>
+
+## License
+MIT
