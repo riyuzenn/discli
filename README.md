@@ -32,4 +32,7 @@
 Discli offers you a development and deployment system (heroku) (comming soon). It's easy to use and reliable.
 
 ## Usage
-
+```
+discli create
+```
+<img src='https://github.com/zenqii/discli/raw/main/preview/discli.gif'/>
