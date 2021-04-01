@@ -28,7 +28,7 @@ def get_long_description():
         return readme
 
 setup(
-  name="discordcli",
+  name="discli", # I changed the name
   author="Zenqi",
   description="🎲 Discord Bot CLI for creating / deploying your discord bots!",
   long_description=get_long_description(),
