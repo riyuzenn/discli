@@ -93,8 +93,8 @@ class Heroku:
         self.console.log("\n[red]»[/red] executing [magenta]git add .[/magenta].")
         self.procress("git add .")
 
-        self.console.log('\n[red]»[/red] executing [magenta]git commit -am "upload"[/magenta].')
-        self.procress('git commit') 
+        self.console.log('\n[red]»[/red] executing [magenta]git commit -a -m "upload"[/magenta].')
+        self.procress('git commit -a -m "upload files"') 
 
         self.console.log("\n[red]»[/red] executing [magenta]git push heroku master[/magenta].")
         self.procress("git push heroku master")       
@@ -134,7 +134,6 @@ class DiscordCLI:
         self.console = Console()
         self.folder_name = folder_name
 
-        
 
         if self.folder_name != None:
             os.system("mkdir {}".format(folder_name))
@@ -143,7 +142,7 @@ class DiscordCLI:
 
         # check for update
 
-        if Variables.UPDATE:
+        if __import__('discli').__version__ != Variables.VERSION:
             self.console.print(f"New version is released please install via [red]pip install --upgrade discli [/red], {Variables.VERSION}: {Variables.RELEASENOTE}")
             sys.exit()
     
