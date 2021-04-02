@@ -23,14 +23,92 @@ from rich.progress import track
 import requests
 from rich.prompt import Prompt, Confirm
 import os
-import time
+import subprocess
 import json
+import time
+import getpass
 import shutil
 import sys
 
 class Heroku:
     def __init__(self, path):
         self.path = path
+        self.email = Prompt.ask("Enter your email for git (require in order to commit via git)")
+        self.username = Prompt.ask("Enter your username", default=getpass.getuser())
+
+        while self.email == "":
+            Prompt.ask("Enter your email for git")
+
+        try:
+
+            with open(self.path + "\\config.json", "r") as f:
+                data = json.load(f)
+
+        except FileNotFoundError:
+            print("config.json is missing..")
+            sys.exit()
+        
+        
+        self.name = str(data["name"]).replace(" ", "").lower()
+        self.console = Console()
+        self.is_heroku_in_path()
+        self.login()
+        self.main()
+
+    def is_heroku_in_path(self):
+        self.heroku_path = shutil.which("heroku") 
+        
+        if self.heroku_path: return
+        else: 
+            self.console.log("[red]» [magenta]heroku.bat[/magenta] is missing. Install heroku @ https://devcenter.heroku.com/articles/heroku-cli.") 
+            sys.exit()
+
+    def login(self):
+        self.console.log("[red]»[/red] executing [magenta]heroku login[/magenta].")
+        self.procress("heroku login")
+
+
+    def main(self):
+        self._git = shutil.which("git")
+
+        if self._git: pass
+        else: self.console.print("[red]» [magenta]git[/magenta] is missing. Install git @ https://git-scm.com/downloads")
+
+        # init 
+        self.console.log("\n[red]»[/red] executing [magenta]git init[/magenta].") 
+        self.procress("git init")
+
+        self.console.log(f'\n[red]»[/red] executing [magenta]git config --global user.name "{self.username}"[/magenta].')
+        self.procress(f"git config --global user.name '{self.username}'")
+
+        self.console.log(f'\n[red]»[/red] executing [magenta]git config user.email "{self.email}"[/magenta].')
+        self.procress(f'git config user.email "{self.email}"')
+
+        self.console.log(f"\n[red]»[/red] executing [magenta]heroku create {self.name}[/magenta].")
+        self.procress(f"heroku create {self.name}")
+
+        self.console.log(f"\n[red]»[/red] executing [magenta]heroku git:remote -a {self.name}[/magenta].")
+        self.procress(f"heroku git:remote -a {self.name}")
+
+        self.console.log("\n[red]»[/red] executing [magenta]git add .[/magenta].")
+        self.procress("git add .")
+
+        self.console.log('\n[red]»[/red] executing [magenta]git commit -am "upload"[/magenta].')
+        self.procress('git commit') 
+
+        self.console.log("\n[red]»[/red] executing [magenta]git push heroku master[/magenta].")
+        self.procress("git push heroku master")       
+
+    def push_to_heroku(self):
+        pass
+    
+    def procress(self, command):
+        p = subprocess.run(command, shell=True)
+        if p.returncode != 0:
+            self.console.print(f"[red]»[/red] error executing [magenta]{command}[/magenta].")
+
+        return p
+
 
 
 class Variables:
@@ -56,6 +134,8 @@ class DiscordCLI:
         self.console = Console()
         self.folder_name = folder_name
 
+        
+
         if self.folder_name != None:
             os.system("mkdir {}".format(folder_name))
             os.chdir(os.getcwd() + f"\\{folder_name}")
@@ -72,7 +152,7 @@ class DiscordCLI:
         self.console.print(f"\nDiscord Bot CLI v{Variables.VERSION} for creating projects")
         self.console.print("Copyright (c) 2020, [link=https://github.com/zenqii][magenta]Zenqi[/magenta][/link]. All rights reserved.")
 
-        user_name = os.path.expanduser("~").split("\\")[2] +"'s bot"
+        user_name = getpass.getuser() +"bot"
         config = {}
         bot_token = ""
 
@@ -119,7 +199,7 @@ class DiscordCLI:
                 fw.close()
 
             with open("Procfile", "w") as f:
-                f.write("web: python main.py")
+                f.write("worker: python main.py")
 
 
     def copy_extension(self, path):
@@ -196,7 +276,8 @@ def discli():
             run(os.getcwd())
 
         elif sys.argv[1] == "heroku":
-            print("Comming soon! I'll inform you whenever the update comes in.")
+            heroku = Heroku(os.getcwd())
+            #print("Comming soon! I'll inform you whenever the update comes in.")
 
     except IndexError:
         help_command()
