@@ -1,6 +1,6 @@
 {
   "version": "1.1.2",
-  "update": false,
-  "release_note": "Fixed update issues and deleted previous version"
+  "update": true,
+  "release_note": "Changed the name -> discli. Install via pip install discli"
 }
   
