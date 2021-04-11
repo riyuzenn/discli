@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-   <a href="https://github.com/zenqii">
+   <a href="https://github.com/znqi">
     <img src="https://img.shields.io/github/followers/zenqii?label=Follow&logo=github&style=flat-square"
          alt="GitHub">
      <a href="#License">
